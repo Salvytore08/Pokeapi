@@ -1,35 +1,40 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState, useEffect } from "react";
-
-import "bootstrap/dist/js/bootstrap";
-import Cards from './components/cards/cards'
-
-let [pageNumber, setPageNumber] = useState(1);
-  let [search, setSearch] = useState("");
-  let [status, setStatus] = useState("");
-  let [gender, setGender] = useState("");
-  let [species, setSpecies] = useState("");
-
-  let [fetchedData, updateFetchedData] = useState([]);
-  let { info, results } = fetchedData;
-
-  //console.log(fetchedData)
-  let api = `https://pokeapi.co/api/v2/pokemon/${id}`;
-
-  useEffect(() => {
-    (async function () {
-      let data = await fetch(api).then((res) => res.json());
-      updateFetchedData(data);
-    })();
-  }, [api]);
-
+import { Link, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import PokemonDetail from "./pages/PokemonDetail";
 
 function App() {
   return (
     <>
-      <Cards/>
+      <header className="app-header">
+        <div className="container">
+          <Link to="/" className="app-title">
+            <span className="pokeball" aria-hidden="true" />
+            Pokédex
+          </Link>
+        </div>
+      </header>
+
+      <main className="container py-4">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/pokemon/:name" element={<PokemonDetail />} />
+          <Route
+            path="*"
+            element={
+              <div className="text-center py-5">
+                <p className="fs-5">Página no encontrada</p>
+                <Link to="/" className="btn btn-danger">Volver a la Pokédex</Link>
+              </div>
+            }
+          />
+        </Routes>
+      </main>
+
+      <footer className="text-center text-muted small py-4">
+        Datos de <a href="https://pokeapi.co" target="_blank" rel="noreferrer">PokéAPI</a>
+      </footer>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
